@@ -1,0 +1,16 @@
+{
+  "name": "vynara/vynara-finance",
+  "description": "VYNARA FINANCE - Professional Financial Services Website",
+  "type": "project",
+  "require": {
+    "php": ">=8.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Vynara\\": "src/"
+    }
+  },
+  "config": {
+    "optimize-autoloader": true
+  }
+}
