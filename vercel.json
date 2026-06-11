@@ -23,8 +23,5 @@
     { "src": "/admin007(.*)", "dest": "/admin007/index.php" },
     { "src": "/setup(.*)", "dest": "/setup.php" },
     { "src": "/(.*)", "dest": "/index.php" }
-  ],
-  "env": {
-    "DATABASE_URL": "@database_url"
-  }
+  ]
 }
