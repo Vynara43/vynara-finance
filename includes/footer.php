@@ -74,6 +74,6 @@ $contactEmail = getSetting('contact_email', SITE_EMAIL);
 </footer>
 
 <!-- Scripts -->
-<script src="/assets/js/main.js" defer></script>
+<script src="/assets/js/main.js?v=20260611b" defer></script>
 </body>
 </html>
