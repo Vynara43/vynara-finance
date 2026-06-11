@@ -4,19 +4,20 @@ function getDB(): PDO {
     static $pdo = null;
     if ($pdo !== null) return $pdo;
 
-    $url = getenv('DATABASE_URL') ?: '';
+    // Support both DB_URL (Vercel) and DATABASE_URL (standard)
+    $url = getenv('DB_URL') ?: getenv('DATABASE_URL') ?: '';
     if (empty($url)) {
-        throw new RuntimeException('DATABASE_URL environment variable not set');
+        throw new RuntimeException('No database URL set (DB_URL or DATABASE_URL)');
     }
 
     $parsed = parse_url($url);
     $host   = $parsed['host'] ?? '';
     $port   = $parsed['port'] ?? 5432;
     $dbname = ltrim($parsed['path'] ?? '', '/');
-    $user   = $parsed['user'] ?? '';
-    $pass   = $parsed['pass'] ?? '';
+    $user   = rawurldecode($parsed['user'] ?? '');
+    $pass   = rawurldecode($parsed['pass'] ?? '');
 
-    // Extract extra params from query string
+    // Extract sslmode, ignore unsupported params like channel_binding
     $query  = $parsed['query'] ?? '';
     parse_str($query, $params);
     $sslmode = $params['sslmode'] ?? 'require';
