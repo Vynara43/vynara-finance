@@ -1,0 +1,36 @@
+Options -Indexes
+RewriteEngine On
+
+# Serve static assets directly
+RewriteCond %{REQUEST_URI} ^/assets/ [NC]
+RewriteRule ^ - [L]
+
+# API routes
+RewriteRule ^api/contact/?$ /api/contact.php [L,QSA]
+RewriteRule ^api/apply/?$   /api/apply.php   [L,QSA]
+
+# Admin
+RewriteRule ^admin007/?(.*)$ /admin007/index.php [L,QSA]
+
+# Setup
+RewriteRule ^setup/?$ /setup.php [L,QSA]
+
+# Everything else → main router
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ /index.php [L,QSA]
+
+# Security headers
+<IfModule mod_headers.c>
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-XSS-Protection "1; mode=block"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# PHP settings
+<IfModule mod_php.c>
+  php_flag display_errors Off
+  php_value upload_max_filesize 8M
+  php_value post_max_size 8M
+</IfModule>
