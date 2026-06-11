@@ -1,6 +1,7 @@
 {
   "version": 2,
   "builds": [
+    { "src": "assets/**/*", "use": "@vercel/static" },
     { "src": "**/*.php", "use": "vercel-php@0.7.2" }
   ],
   "routes": [
