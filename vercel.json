@@ -1,18 +1,6 @@
 {
   "functions": {
-    "index.php": {
-      "runtime": "vercel-php@0.7.2"
-    },
-    "admin007/index.php": {
-      "runtime": "vercel-php@0.7.2"
-    },
-    "api/contact.php": {
-      "runtime": "vercel-php@0.7.2"
-    },
-    "api/apply.php": {
-      "runtime": "vercel-php@0.7.2"
-    },
-    "setup.php": {
+    "**/*.php": {
       "runtime": "vercel-php@0.7.2"
     }
   },
