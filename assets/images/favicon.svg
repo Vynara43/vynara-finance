@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Background -->
+  <rect width="64" height="64" rx="14" fill="#0a1628"/>
+  <!-- Bank building columns base -->
+  <rect x="10" y="48" width="44" height="6" rx="2" fill="#c9a84c"/>
+  <!-- Building body -->
+  <rect x="14" y="24" width="36" height="26" fill="#c9a84c" opacity="0.15"/>
+  <!-- Columns -->
+  <rect x="15" y="24" width="5" height="24" rx="1.5" fill="#c9a84c"/>
+  <rect x="24" y="24" width="5" height="24" rx="1.5" fill="#c9a84c"/>
+  <rect x="33" y="24" width="5" height="24" rx="1.5" fill="#c9a84c"/>
+  <rect x="42" y="24" width="5" height="24" rx="1.5" fill="#c9a84c"/>
+  <!-- Pediment/roof -->
+  <polygon points="8,23 32,8 56,23" fill="none" stroke="#c9a84c" stroke-width="2.5" stroke-linejoin="round"/>
+  <polygon points="10,23 32,10 54,23" fill="#c9a84c" opacity="0.12"/>
+  <!-- Top accent -->
+  <rect x="29" y="11" width="6" height="4" rx="1" fill="#e0c97a"/>
+</svg>
