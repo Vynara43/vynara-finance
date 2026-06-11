@@ -1,0 +1,30 @@
+{
+  "functions": {
+    "index.php": {
+      "runtime": "vercel-php@0.7.2"
+    },
+    "admin007/index.php": {
+      "runtime": "vercel-php@0.7.2"
+    },
+    "api/contact.php": {
+      "runtime": "vercel-php@0.7.2"
+    },
+    "api/apply.php": {
+      "runtime": "vercel-php@0.7.2"
+    },
+    "setup.php": {
+      "runtime": "vercel-php@0.7.2"
+    }
+  },
+  "routes": [
+    { "src": "/assets/(.*)", "dest": "/assets/$1" },
+    { "src": "/api/contact(.*)", "dest": "/api/contact.php" },
+    { "src": "/api/apply(.*)", "dest": "/api/apply.php" },
+    { "src": "/admin007(.*)", "dest": "/admin007/index.php" },
+    { "src": "/setup(.*)", "dest": "/setup.php" },
+    { "src": "/(.*)", "dest": "/index.php" }
+  ],
+  "env": {
+    "DATABASE_URL": "@database_url"
+  }
+}
