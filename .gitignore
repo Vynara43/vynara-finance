@@ -1,0 +1,28 @@
+# Dependencies
+/vendor/
+
+# Environment / secrets
+.env
+.env.local
+.env.production
+
+# Logs
+*.log
+/logs/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Vercel
+.vercel/
+
+# Build artifacts
+*.cache
