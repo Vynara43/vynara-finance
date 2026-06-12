@@ -1,11 +1,23 @@
 <?php
 // ─── VYNARA FINANCE – Site Configuration ───────────────────────────────────
+// Charge les variables d'environnement en premier
+require_once __DIR__ . '/env-loader.php';
+
 define('SITE_NAME',    'VYNARA FINANCE');
 define('SITE_DOMAIN',  'vynara-finance.cfd');
 define('SITE_URL',     'https://vynara-finance.cfd');
 define('SITE_EMAIL',   getenv('CONTACT_EMAIL') ?: 'contact@vynara-finance.cfd');
 define('ADMIN_PATH',   'admin007');
-define('ADMIN_PASS',   password_hash('19990000', PASSWORD_BCRYPT, ['cost' => 10]));
+
+// ⚠️ IMPORTANT: Admin password should be set via environment variable
+// Never store plain passwords in code
+$adminPass = getenv('ADMIN_PASSWORD');
+if (!$adminPass || $adminPass === 'change_me_to_secure_password') {
+    // Default fallback for development (CHANGE THIS IN PRODUCTION!)
+    define('ADMIN_PASS', password_hash('admin123', PASSWORD_BCRYPT, ['cost' => 10]));
+} else {
+    define('ADMIN_PASS', password_hash($adminPass, PASSWORD_BCRYPT, ['cost' => 10]));
+}
 
 // Languages in display order
 define('LANGUAGES', [
