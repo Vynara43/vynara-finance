@@ -32,6 +32,9 @@ define('LANGUAGES', [
     'ch' => ['name' => 'Suisse',    'flag' => '🇨🇭', 'iso' => 'CH', 'file' => 'de'],
 ]);
 
+// DEFAULT LANGUAGE - Set to Danish (Denmark)
+define('DEFAULT_LANG', 'da');
+
 // Admin stored hash (static for security)
 define('ADMIN_HASH', '$2y$10$somehashedpassword'); // overridden in auth check
 
