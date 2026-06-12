@@ -46,10 +46,6 @@
             <div class="carousel-overlay"></div>
           </div>
           <div class="carousel-slide">
-            <img src="/assets/images/hero-3.png" alt="Fintech Innovation" loading="lazy">
-            <div class="carousel-overlay"></div>
-          </div>
-          <div class="carousel-slide">
             <img src="/assets/images/hero-4.png" alt="European Financial District" loading="lazy">
             <div class="carousel-overlay"></div>
           </div>
@@ -59,7 +55,6 @@
             <button class="carousel-dot active" aria-label="Slide 1"></button>
             <button class="carousel-dot" aria-label="Slide 2"></button>
             <button class="carousel-dot" aria-label="Slide 3"></button>
-            <button class="carousel-dot" aria-label="Slide 4"></button>
           </div>
         </div>
 
@@ -197,7 +192,7 @@
     <div class="process-header" data-aos="fade-up">
       <div class="section-label"><?= t('nav.process') ?></div>
       <h2 class="section-title"><?= t('process.title') ?></h2>
-      <p class="section-subtitle"><?= t('process.subtitle') ?></p>
+      <p class="process-subtitle"><?= t('process.subtitle') ?></p>
     </div>
     <div class="process-grid">
       <?php
@@ -218,7 +213,7 @@
   </div>
 </section>
 
-<!-- ═══ ABOUT PREVIEW ════════════════════════════════════════════════════════ -->
+<!-- ═══ ABOUT PREVIEW ══════════════════���═════════════════════════════════════ -->
 <section class="about">
   <div class="container">
     <div class="about-inner">
