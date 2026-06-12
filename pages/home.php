@@ -1,6 +1,6 @@
 <?php if (!defined('SITE_NAME')) die(); ?>
 
-<!-- ═══ HERO ════════════════════════════════════════════════════════════════ -->
+<!-- ═══ HERO ═══════════════════════════════════════════════════════════════════ -->
 <section class="hero" id="home">
   <div class="container">
     <div class="hero-inner">
@@ -96,6 +96,33 @@
   </div>
 </section>
 
+<!-- ═══ TRUST SECTION ════════════════════════════════════════════════════════ -->
+<section class="trust-section">
+  <div class="container">
+    <div class="trust-header" data-aos="fade-up">
+      <h2><?= t('trust.title') ?></h2>
+      <p><?= t('trust.subtitle') ?></p>
+    </div>
+    <div class="trust-grid">
+      <div class="trust-card" data-aos="fade-up">
+        <div class="trust-icon">🏦</div>
+        <h3><?= t('trust.regulated.title') ?></h3>
+        <p><?= t('trust.regulated.desc') ?></p>
+      </div>
+      <div class="trust-card" data-aos="fade-up" style="transition-delay:0.1s">
+        <div class="trust-icon">🔒</div>
+        <h3><?= t('trust.secure.title') ?></h3>
+        <p><?= t('trust.secure.desc') ?></p>
+      </div>
+      <div class="trust-card" data-aos="fade-up" style="transition-delay:0.2s">
+        <div class="trust-icon">⭐</div>
+        <h3><?= t('trust.rated.title') ?></h3>
+        <p><?= t('trust.rated.desc') ?></p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ═══ FEATURES ═════════════════════════════════════════════════════════════ -->
 <section class="features">
   <div class="container">
@@ -119,7 +146,7 @@
   </div>
 </section>
 
-<!-- ═══ SERVICES PREVIEW ══════════════════════════════════════════════════════ -->
+<!-- ═══ SERVICES PREVIEW ═════════════════════════════════════════════════════ -->
 <section class="services">
   <div class="container">
     <div class="services-header" data-aos="fade-up">
@@ -164,7 +191,7 @@
   </div>
 </section>
 
-<!-- ═══ PROCESS PREVIEW ═══════════════════════════════════════════════════════ -->
+<!-- ═══ PROCESS PREVIEW ══════════════════════════════════════════════════════ -->
 <section class="process">
   <div class="container">
     <div class="process-header" data-aos="fade-up">
@@ -199,7 +226,7 @@
         <img src="/assets/images/hero-1.png" alt="VYNARA FINANCE">
         <div class="about-image-badge">
           <div class="badge-value">10+</div>
-          <div class="badge-label"><?= $lang === 'de' ? 'Jahre Erfahrung' : ($lang === 'it' ? 'Anni di Esperienza' : ($lang === 'pt' ? 'Anos de Experiência' : ($lang === 'da' ? 'Års Erfaring' : 'Years of Experience'))) ?></div>
+          <div class="badge-label"><?= $lang === 'de' ? 'Jahre Erfahrung' : ($lang === 'it' ? 'Anni di Esperienza' : ($lang === 'pt' ? 'Anos de Experiência' : ($lang === 'da' ? 'Års Erfaring' : 'Years Experience') )) ?></div>
         </div>
       </div>
       <div class="about-text" data-aos="fade-left">
@@ -227,6 +254,42 @@
         </div>
         <div style="margin-top:32px">
           <a href="/about?lang=<?= h($lang) ?>" class="btn btn-primary"><?= t('cta.learn') ?> →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TESTIMONIALS ═════════════════════════════════════════════════════════ -->
+<section class="testimonials">
+  <div class="container">
+    <div class="testimonials-header" data-aos="fade-up">
+      <h2><?= t('testimonials.title') ?></h2>
+      <p><?= t('testimonials.subtitle') ?></p>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card" data-aos="fade-up">
+        <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+        <p class="testimonial-text"><?= t('testimonials.client1.text') ?></p>
+        <div class="testimonial-author">
+          <div class="author-name"><?= t('testimonials.client1.name') ?></div>
+          <div class="author-role"><?= t('testimonials.client1.role') ?></div>
+        </div>
+      </div>
+      <div class="testimonial-card" data-aos="fade-up" style="transition-delay:0.1s">
+        <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+        <p class="testimonial-text"><?= t('testimonials.client2.text') ?></p>
+        <div class="testimonial-author">
+          <div class="author-name"><?= t('testimonials.client2.name') ?></div>
+          <div class="author-role"><?= t('testimonials.client2.role') ?></div>
+        </div>
+      </div>
+      <div class="testimonial-card" data-aos="fade-up" style="transition-delay:0.2s">
+        <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+        <p class="testimonial-text"><?= t('testimonials.client3.text') ?></p>
+        <div class="testimonial-author">
+          <div class="author-name"><?= t('testimonials.client3.name') ?></div>
+          <div class="author-role"><?= t('testimonials.client3.role') ?></div>
         </div>
       </div>
     </div>
