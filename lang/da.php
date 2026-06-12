@@ -1,5 +1,5 @@
 <?php
-// ─── Danish (Denmark) ────────────────────────────────────────────────────────
+// ─── Danish (Denmark) ───────────────────────────────────────────────────────
 $translations = [
     // Nav
     'nav.home'      => 'Hjem',
@@ -25,6 +25,29 @@ $translations = [
     'stats.financed'    => 'Finansieret',
     'stats.response'    => 'Svartid',
     'stats.satisfaction'=> 'Kundetilfredshed',
+
+    // Trust Section
+    'trust.title'           => 'Hvorfor vælge VYNARA FINANCE?',
+    'trust.subtitle'        => 'Sikkerhed, gennemsigtighed og pålidelighed i hver transaktion',
+    'trust.regulated.title' => 'Reguleret og godkendt',
+    'trust.regulated.desc'  => 'Vi opfylder alle europæiske finansielle bestemmelser og er fuldstændig transparent.',
+    'trust.secure.title'    => 'Fuldstændig sikker',
+    'trust.secure.desc'     => '256-bit SSL-kryptering beskytter dine personlige og økonomiske data.',
+    'trust.rated.title'     => '4,9/5 stjerner',
+    'trust.rated.desc'      => 'Over 5.200 tilfredse kunder giver os høje vurderinger på uafhængige platforme.',
+
+    // Testimonials Section
+    'testimonials.title'        => 'Hvad siger vores kunder?',
+    'testimonials.subtitle'     => 'Læs erfaringerne fra tusinder af tilfredse låntakere',
+    'testimonials.client1.text' => 'Fantastisk service! Processen var meget hurtig og ligetil. Jeg modtog mit lån på bare 3 dage.',
+    'testimonials.client1.name' => 'Lars Andersen',
+    'testimonials.client1.role' => 'Entrepreneur, København',
+    'testimonials.client2.text' => 'Bedre renter end jeg forventede. Det var meget let at sammenligne og blive godkendt uden besøg på kontoret.',
+    'testimonials.client2.name' => 'Maria Nielsen',
+    'testimonials.client2.role' => 'Ejendomsinvestor, Århus',
+    'testimonials.client3.text' => 'Meget professionelt team. De svarede på alle mine spørgsmål tydeligt og gav mig den bedst mulige løsning.',
+    'testimonials.client3.name' => 'Henrik Johansen',
+    'testimonials.client3.role' => 'Forretningsleder, Odense',
 
     // Services
     'services.title'    => 'Vores finansieringsløsninger',
