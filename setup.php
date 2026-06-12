@@ -3,12 +3,8 @@
 require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/config/database.php';
 
-// Optional: simple token protection
-$token = $_GET['token'] ?? '';
-if ($token !== 'setup-vynara-2026') {
-    http_response_code(403);
-    die('Accès refusé. Ajoutez ?token=setup-vynara-2026 à l\'URL.');
-}
+// Direct database connection for setup
+$url = 'postgresql://neondb_owner:npg_GBh0vHXqpi5E@ep-billowing-sea-ahmhmtma-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require';
 
 header('Content-Type: text/html; charset=utf-8');
 echo '<pre style="background:#0a1628;color:#c9a84c;padding:30px;font-family:monospace;font-size:13px">';
