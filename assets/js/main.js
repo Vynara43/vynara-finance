@@ -168,9 +168,9 @@ const contactForm = document.getElementById('contact-form');
 if (contactForm) {
   contactForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const btn   = contactForm.querySelector('[type=submit]');
-    const alert = contactForm.querySelector('.form-alert');
-    const orig  = btn.textContent;
+    const btn    = contactForm.querySelector('[type=submit]');
+    const alert  = document.getElementById('contactAlert');
+    const orig   = btn.textContent;
 
     btn.disabled = true;
     btn.textContent = '...';
@@ -182,14 +182,24 @@ if (contactForm) {
       const resp = await fetch('/api/contact.php', { method: 'POST', body: formData });
       const data = await resp.json();
 
-      alert.className = 'form-alert show ' + (data.success ? 'success' : 'error');
-      alert.textContent = data.message;
-
-      if (data.success) contactForm.reset();
+      if (data.success) {
+        contactForm.reset();
+        contactForm.style.display = 'none';
+        alert.className = 'form-alert show success';
+        alert.innerHTML = '<div style="text-align:center;padding:20px 0">' +
+          '<div style="font-size:2.5rem;margin-bottom:12px">&#10003;</div>' +
+          '<div style="font-size:1.1rem;font-weight:700;margin-bottom:8px">' + data.message + '</div>' +
+          '<div style="font-size:0.85rem;color:#2ed573;opacity:0.8">VYNARA FINANCE</div>' +
+          '</div>';
+      } else {
+        alert.className = 'form-alert show error';
+        alert.textContent = data.message;
+        btn.disabled = false;
+        btn.textContent = orig;
+      }
     } catch {
       alert.className = 'form-alert show error';
-      alert.textContent = 'Erreur réseau. Réessayez.';
-    } finally {
+      alert.textContent = 'Erreur r\u00e9seau. R\u00e9essayez.';
       btn.disabled = false;
       btn.textContent = orig;
     }
@@ -201,9 +211,9 @@ const applyForm = document.getElementById('apply-form');
 if (applyForm) {
   applyForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const btn   = applyForm.querySelector('[type=submit]');
-    const alert = applyForm.querySelector('.form-alert');
-    const orig  = btn.textContent;
+    const btn    = applyForm.querySelector('[type=submit]');
+    const alert  = document.getElementById('applyAlert');
+    const orig   = btn.textContent;
 
     btn.disabled = true;
     btn.textContent = '...';
@@ -215,14 +225,24 @@ if (applyForm) {
       const resp = await fetch('/api/apply.php', { method: 'POST', body: formData });
       const data = await resp.json();
 
-      alert.className = 'form-alert show ' + (data.success ? 'success' : 'error');
-      alert.textContent = data.message;
-
-      if (data.success) applyForm.reset();
+      if (data.success) {
+        applyForm.reset();
+        applyForm.style.display = 'none';
+        alert.className = 'form-alert show success';
+        alert.innerHTML = '<div style="text-align:center;padding:20px 0">' +
+          '<div style="font-size:2.5rem;margin-bottom:12px">&#10003;</div>' +
+          '<div style="font-size:1.1rem;font-weight:700;margin-bottom:8px">' + data.message + '</div>' +
+          '<div style="font-size:0.85rem;color:#2ed573;opacity:0.8">VYNARA FINANCE</div>' +
+          '</div>';
+      } else {
+        alert.className = 'form-alert show error';
+        alert.textContent = data.message;
+        btn.disabled = false;
+        btn.textContent = orig;
+      }
     } catch {
       alert.className = 'form-alert show error';
-      alert.textContent = 'Erreur réseau. Réessayez.';
-    } finally {
+      alert.textContent = 'Erreur r\u00e9seau. R\u00e9essayez.';
       btn.disabled = false;
       btn.textContent = orig;
     }
