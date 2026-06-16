@@ -44,9 +44,14 @@ function getSetting(string $key, string $default = ''): string {
 }
 
 function setSetting(string $key, string $value): void {
-    $pdo = getDB();
-    $pdo->prepare(
-        'INSERT INTO settings (key, value, updated_at) VALUES (?, ?, NOW())
-         ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_at = NOW()'
-    )->execute([$key, $value]);
+    try {
+        $pdo = getDB();
+        $pdo->prepare(
+            'INSERT INTO settings (key, value, updated_at) VALUES (?, ?, NOW())
+             ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_at = NOW()'
+        )->execute([$key, $value]);
+    } catch (Throwable $e) {
+        error_log('setSetting error: ' . $e->getMessage());
+        throw $e;
+    }
 }

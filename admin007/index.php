@@ -40,20 +40,24 @@ if (!isAdminLoggedIn()) {
 
 // Admin is logged in → handle actions
 if ($action === 'save_settings') {
-    $whatsapp     = sanitize($_POST['whatsapp_number']   ?? '');
-    $contactEmail = sanitize($_POST['contact_email']     ?? '');
-    $smtpHost     = sanitize($_POST['smtp_host']         ?? '');
-    $smtpPort     = sanitize($_POST['smtp_port']         ?? '587');
-    $smtpUser     = sanitize($_POST['smtp_user']         ?? '');
-    $smtpPass     = trim($_POST['smtp_pass']             ?? '');
+    try {
+        $whatsapp     = sanitize($_POST['whatsapp_number']   ?? '');
+        $contactEmail = sanitize($_POST['contact_email']     ?? '');
+        $smtpHost     = sanitize($_POST['smtp_host']         ?? '');
+        $smtpPort     = sanitize($_POST['smtp_port']         ?? '587');
+        $smtpUser     = sanitize($_POST['smtp_user']         ?? '');
+        $smtpPass     = trim($_POST['smtp_pass']             ?? '');
 
-    setSetting('whatsapp_number', $whatsapp);
-    setSetting('contact_email',   $contactEmail);
-    setSetting('smtp_host',       $smtpHost);
-    setSetting('smtp_port',       $smtpPort);
-    setSetting('smtp_user',       $smtpUser);
-    if (!empty($smtpPass)) setSetting('smtp_pass', $smtpPass);
-    $settingsSaved = true;
+        setSetting('whatsapp_number', $whatsapp);
+        setSetting('contact_email',   $contactEmail);
+        setSetting('smtp_host',       $smtpHost);
+        setSetting('smtp_port',       $smtpPort);
+        setSetting('smtp_user',       $smtpUser);
+        if (!empty($smtpPass)) setSetting('smtp_pass', $smtpPass);
+        $settingsSaved = true;
+    } catch (Throwable $e) {
+        $settingsError = 'Erreur lors de l\'enregistrement : ' . $e->getMessage();
+    }
 }
 
 if ($action === 'update_status') {
@@ -364,7 +368,22 @@ function adminLoginPage(string $error = ''): void {
     <div class="admin-page-sub">Configurez les paramètres de VYNARA FINANCE</div>
 
     <?php if (!empty($settingsSaved)): ?>
-    <div class="form-alert success show" style="margin-bottom:24px">✓ Paramètres enregistrés avec succès.</div>
+    <div class="form-alert success show" style="margin-bottom:24px">✓ Paramètres enregistrés avec succès. Les emails seront envoyés automatiquement.</div>
+    <?php endif; ?>
+
+    <?php if (!empty($settingsError)): ?>
+    <div class="form-alert error show" style="margin-bottom:24px">⚠️ <?= htmlspecialchars($settingsError) ?></div>
+    <?php endif; ?>
+
+    <?php
+    // Check current SMTP configuration
+    $smtpConfigured = !empty(getSetting('smtp_host', '')) && !empty(getSetting('smtp_pass', ''));
+    if (!$smtpConfigured):
+    ?>
+    <div class="form-alert error show" style="margin-bottom:24px">
+      ⚠️ Configuration SMTP incomplete ! Les emails ne seront pas envoyés.
+      Veuillez remplir : Serveur SMTP, Port, Email SMTP et Mot de passe SMTP.
+    </div>
     <?php endif; ?>
 
     <form method="POST" action="/admin007?tab=settings">

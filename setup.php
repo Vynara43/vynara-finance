@@ -3,9 +3,6 @@
 require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/config/database.php';
 
-// Direct database connection for setup
-$url = 'postgresql://neondb_owner:npg_GBh0vHXqpi5E@ep-billowing-sea-ahmhmtma-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require';
-
 header('Content-Type: text/html; charset=utf-8');
 echo '<pre style="background:#0a1628;color:#c9a84c;padding:30px;font-family:monospace;font-size:13px">';
 echo "<strong>VYNARA FINANCE — Database Setup</strong>\n\n";
@@ -59,7 +56,7 @@ try {
     ");
     echo "✓ Table 'contact_messages' créée\n\n";
 
-    // Default settings
+    // Default settings (empty SMTP - must be configured via admin)
     $defaults = [
         ['whatsapp_number', ''],
         ['contact_email',   'contact@vynara-finance.cfd'],
@@ -75,8 +72,11 @@ try {
     }
     echo "✓ Paramètres par défaut insérés\n\n";
     echo "<strong style='color:#2ed573'>✅ Installation terminée avec succès !</strong>\n\n";
-    echo "Vous pouvez maintenant accéder à l'admin : <a href='/admin007' style='color:#c9a84c'>/admin007</a>\n";
-    echo "<strong style='color:#ff4757'>⚠️ Supprimez ce fichier setup.php après installation !</strong>\n";
+    echo "Prochaines étapes :\n";
+    echo "  1. Accédez à l'admin : <a href='/admin007' style='color:#c9a84c'>/admin007</a>\n";
+    echo "  2. Allez dans 'Paramètres' et configurez SMTP pour activer les emails\n";
+    echo "  3. Supprimez ce fichier setup.php\n";
+    echo "\n<strong style='color:#ff4757'>⚠️ Supprimez ce fichier setup.php après installation !</strong>\n";
 
 } catch (Throwable $e) {
     echo "<strong style='color:#ff4757'>❌ Erreur : " . htmlspecialchars($e->getMessage()) . "</strong>\n";
