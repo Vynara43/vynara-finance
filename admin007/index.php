@@ -106,13 +106,13 @@ function adminLoginPage(string $error = ''): void {
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
   <title>Admin — VYNARA FINANCE</title>
   <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/css/style.css">
 </head>
-<body class="admin-body">
+<body class="admin-body" style="overflow-x:hidden;max-width:100vw">
 <div class="admin-login">
   <div class="login-box">
     <div class="logo-wrap">
@@ -143,24 +143,24 @@ function adminLoginPage(string $error = ''): void {
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
   <title>Admin — VYNARA FINANCE</title>
   <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/css/style.css">
 </head>
-<body class="admin-body">
+<body class="admin-body" style="overflow-x:hidden;max-width:100vw">
 
 <!-- Admin Header -->
 <header class="admin-header">
   <div class="admin-logo">
     <span style="font-size:1.4rem">🏦</span>
-    VYNARA <span>FINANCE</span>
-    <span style="font-size:0.7rem;color:#8a9bb5;font-weight:400;margin-left:6px">— Admin</span>
+    <span class="admin-logo-text">VYNARA <span>FINANCE</span></span>
+    <span class="admin-logo-badge">— Admin</span>
   </div>
   <div class="admin-user">
     <div class="admin-avatar">VF</div>
-    <span style="font-size:0.85rem;color:#8a9bb5">Administrateur</span>
+    <span class="admin-user-label">Administrateur</span>
     <a href="/admin007?action=logout" class="admin-btn admin-btn-danger" style="padding:7px 14px;font-size:0.8rem">Déconnexion</a>
   </div>
 </header>

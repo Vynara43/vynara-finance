@@ -18,7 +18,7 @@ $currentPage = currentPage();
 <html lang="<?= h($langFile) ?>" dir="ltr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <meta name="description" content="<?= h(t('hero.desc')) ?>">
   <meta name="robots" content="index, follow">
 
@@ -69,11 +69,11 @@ $currentPage = currentPage();
 
     <!-- Desktop Nav -->
     <div class="navbar-nav">
-      <a href="/?lang=<?= h($currentLang) ?>"               class="<?= $currentPage === 'home' || $currentPage === '' ? 'active' : '' ?>"><?= t('nav.home') ?></a>
-      <a href="/services?lang=<?= h($currentLang) ?>"       class="<?= $currentPage === 'services' ? 'active' : '' ?>"><?= t('nav.services') ?></a>
-      <a href="/process?lang=<?= h($currentLang) ?>"        class="<?= $currentPage === 'process' ? 'active' : '' ?>"><?= t('nav.process') ?></a>
-      <a href="/about?lang=<?= h($currentLang) ?>"          class="<?= $currentPage === 'about' ? 'active' : '' ?>"><?= t('nav.about') ?></a>
-      <a href="/contact?lang=<?= h($currentLang) ?>"        class="<?= $currentPage === 'contact' ? 'active' : '' ?>"><?= t('nav.contact') ?></a>
+      <a href="/?lang=<?= h($currentLang) ?>" class="<?= $currentPage === 'home' || $currentPage === '' ? 'active' : '' ?>"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><?= t('nav.home') ?></a>
+      <a href="/services?lang=<?= h($currentLang) ?>" class="<?= $currentPage === 'services' ? 'active' : '' ?>"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg><?= t('nav.services') ?></a>
+      <a href="/process?lang=<?= h($currentLang) ?>" class="<?= $currentPage === 'process' ? 'active' : '' ?>"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><?= t('nav.process') ?></a>
+      <a href="/about?lang=<?= h($currentLang) ?>" class="<?= $currentPage === 'about' ? 'active' : '' ?>"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><?= t('nav.about') ?></a>
+      <a href="/contact?lang=<?= h($currentLang) ?>" class="<?= $currentPage === 'contact' ? 'active' : '' ?>"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><?= t('nav.contact') ?></a>
     </div>
 
     <!-- Right Side -->
@@ -108,12 +108,12 @@ $currentPage = currentPage();
 
 <!-- Mobile Nav -->
 <div class="mobile-nav" id="mobileNav">
-  <a href="/?lang=<?= h($currentLang) ?>"><?= t('nav.home') ?></a>
-  <a href="/services?lang=<?= h($currentLang) ?>"><?= t('nav.services') ?></a>
-  <a href="/process?lang=<?= h($currentLang) ?>"><?= t('nav.process') ?></a>
-  <a href="/about?lang=<?= h($currentLang) ?>"><?= t('nav.about') ?></a>
-  <a href="/contact?lang=<?= h($currentLang) ?>"><?= t('nav.contact') ?></a>
-  <a href="/apply?lang=<?= h($currentLang) ?>" style="color:var(--gold-500);font-weight:700;margin-top:16px;"><?= t('nav.apply') ?></a>
+  <a href="/?lang=<?= h($currentLang) ?>"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><?= t('nav.home') ?></a>
+  <a href="/services?lang=<?= h($currentLang) ?>"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg><?= t('nav.services') ?></a>
+  <a href="/process?lang=<?= h($currentLang) ?>"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><?= t('nav.process') ?></a>
+  <a href="/about?lang=<?= h($currentLang) ?>"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><?= t('nav.about') ?></a>
+  <a href="/contact?lang=<?= h($currentLang) ?>"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><?= t('nav.contact') ?></a>
+  <a href="/apply?lang=<?= h($currentLang) ?>" class="mobile-nav-apply"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg><?= t('nav.apply') ?></a>
 </div>
 
 <!-- WhatsApp Button -->
