@@ -97,11 +97,6 @@ $currentPage = currentPage();
         </div>
       </div>
 
-      <!-- CTA -->
-      <a href="/apply?lang=<?= h($currentLang) ?>" class="btn btn-primary" style="padding:10px 22px;font-size:0.88rem;">
-        <?= t('nav.apply') ?>
-      </a>
-
       <!-- Mobile toggle -->
       <button class="menu-toggle" id="menuToggle" aria-label="Menu">
         <span></span><span></span><span></span>
