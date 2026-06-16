@@ -136,4 +136,22 @@ $translations = [
     'cta.learn'           => 'Læs mere',
     'cta.section.title'   => 'Klar til at realisere dit projekt?',
     'cta.section.desc'    => 'Kontakt os i dag for en gratis og uforpligtende konsultation.',
+
+    // Loan Simulator
+    'sim.title' => 'Låneberegner',
+    'sim.subtitle' => 'Beregn din månedlige ydelse på få sekunder',
+    'sim.amount' => 'Lånebeløb',
+    'sim.duration' => 'Løbetid',
+    'sim.type' => 'Lånetype',
+    'sim.type.personal' => 'Privatlån',
+    'sim.type.business' => 'Erhvervslån',
+    'sim.type.mortgage' => 'Boliglån',
+    'sim.type.refi' => 'Omlægning af lån',
+    'sim.rate' => 'Årlig rente',
+    'sim.monthly' => 'Estimeret månedlig ydelse',
+    'sim.total' => 'Samlede omkostninger',
+    'sim.interest' => 'Samlede renter',
+    'sim.months' => 'måneder',
+    'sim.cta' => 'Ansøg om dette lån',
+    'sim.disclaimer' => 'Vejledende og uforpligtende beregning. Den endelige rente afhænger af din ansøgning.',
 ];

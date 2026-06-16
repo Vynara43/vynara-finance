@@ -6,6 +6,7 @@ session_start();
 require_once dirname(__DIR__) . '/config/config.php';
 require_once dirname(__DIR__) . '/config/database.php';
 require_once dirname(__DIR__) . '/includes/functions.php';
+require_once dirname(__DIR__) . '/includes/mailer.php';
 
 header('Content-Type: application/json');
 
@@ -18,6 +19,7 @@ $email   = sanitize($_POST['email']   ?? '');
 $subject = sanitize($_POST['subject'] ?? '');
 $message = sanitize($_POST['message'] ?? '');
 $lang    = sanitize($_POST['lang']    ?? 'de');
+if (!array_key_exists($lang, LANGUAGES)) $lang = 'de';
 
 // Validate
 if (strlen($name) < 2) jsonResponse(['success' => false, 'message' => 'Nom invalide'], 422);
@@ -35,58 +37,27 @@ try {
     error_log('Contact DB error: ' . $e->getMessage());
 }
 
-// Send email notification
-$smtpHost = getSetting('smtp_host', '');
-$smtpPass = getSetting('smtp_pass', '');
-$smtpUser = getSetting('smtp_user', SITE_EMAIL);
-$smtpPort = (int)getSetting('smtp_port', '587');
-$toEmail  = getSetting('contact_email', SITE_EMAIL);
+$ownerEmail = getSetting('contact_email', SITE_EMAIL);
+$data = ['name' => $name, 'email' => $email, 'subject' => $subject, 'message' => $message];
 
-if (!empty($smtpHost) && !empty($smtpPass)) {
-    sendEmail(
-        $toEmail,
-        '[VYNARA] Nouveau message de ' . $name,
-        "Nom: $name\nEmail: $email\nSujet: $subject\n\nMessage:\n$message",
-        $smtpHost, $smtpPort, $smtpUser, $smtpPass
-    );
-}
+// 1) Confirmation to the visitor (in their language)
+$userMail = vfContactUserEmail($lang, $data);
+vfSendMail($email, $name, $userMail['subject'], $userMail['html']);
+
+// 2) Notification to the site owner (French)
+$ownerMail = vfContactOwnerEmail($data);
+vfSendMail($ownerEmail, SITE_NAME, $ownerMail['subject'], $ownerMail['html'], $email);
 
 // Success message per language
 $messages = [
-    'da' => 'Tak! Din besked er modtaget.',
-    'de' => 'Danke! Ihre Nachricht wurde empfangen.',
-    'at' => 'Danke! Ihre Nachricht wurde empfangen.',
-    'it' => 'Grazie! Il tuo messaggio è stato ricevuto.',
-    'pt' => 'Obrigado! A sua mensagem foi recebida.',
-    'el' => 'Ευχαριστούμε! Το μήνυμά σας ελήφθη.',
-    'sk' => 'Ďakujeme! Vaša správa bola prijatá.',
-    'sl' => 'Hvala! Vaše sporočilo je bilo prejeto.',
-    'ch' => 'Danke! Ihre Nachricht wurde empfangen.',
+    'da' => 'Tak! Din besked er modtaget. Du modtager snart en bekræftelse på e-mail.',
+    'de' => 'Danke! Ihre Nachricht wurde empfangen. Sie erhalten in Kürze eine Bestätigung per E-Mail.',
+    'at' => 'Danke! Ihre Nachricht wurde empfangen. Sie erhalten in Kürze eine Bestätigung per E-Mail.',
+    'it' => 'Grazie! Il tuo messaggio è stato ricevuto. Riceverai a breve una conferma via email.',
+    'pt' => 'Obrigado! A sua mensagem foi recebida. Receberá em breve uma confirmação por email.',
+    'el' => 'Ευχαριστούμε! Το μήνυμά σας ελήφθη. Θα λάβετε σύντομα επιβεβαίωση μέσω email.',
+    'sk' => 'Ďakujeme! Vaša správa bola prijatá. Čoskoro dostanete potvrdenie e-mailom.',
+    'sl' => 'Hvala! Vaše sporočilo je bilo prejeto. Kmalu boste prejeli potrdilo po e-pošti.',
+    'ch' => 'Danke! Ihre Nachricht wurde empfangen. Sie erhalten in Kürze eine Bestätigung per E-Mail.',
 ];
 jsonResponse(['success' => true, 'message' => $messages[$lang] ?? $messages['de']]);
-
-function sendEmail(string $to, string $subject, string $body, string $host, int $port, string $user, string $pass): void {
-    // Simple SMTP via stream (no dependency)
-    try {
-        $fp = stream_socket_client("tcp://$host:$port", $errno, $errstr, 15);
-        if (!$fp) return;
-        $r = fgets($fp);
-        fputs($fp, "EHLO vynara-finance.cfd\r\n"); $r = fgets($fp);
-        fputs($fp, "AUTH LOGIN\r\n"); $r = fgets($fp);
-        fputs($fp, base64_encode($user)."\r\n"); $r = fgets($fp);
-        fputs($fp, base64_encode($pass)."\r\n"); $r = fgets($fp);
-        fputs($fp, "MAIL FROM:<$user>\r\n"); $r = fgets($fp);
-        fputs($fp, "RCPT TO:<$to>\r\n"); $r = fgets($fp);
-        fputs($fp, "DATA\r\n"); $r = fgets($fp);
-        $msg  = "From: VYNARA FINANCE <$user>\r\n";
-        $msg .= "To: $to\r\n";
-        $msg .= "Subject: =?UTF-8?B?" . base64_encode($subject) . "?=\r\n";
-        $msg .= "Content-Type: text/plain; charset=utf-8\r\n\r\n";
-        $msg .= $body . "\r\n.\r\n";
-        fputs($fp, $msg); $r = fgets($fp);
-        fputs($fp, "QUIT\r\n");
-        fclose($fp);
-    } catch (Throwable $e) {
-        error_log('SMTP error: ' . $e->getMessage());
-    }
-}

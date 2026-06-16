@@ -6,6 +6,7 @@ session_start();
 require_once dirname(__DIR__) . '/config/config.php';
 require_once dirname(__DIR__) . '/config/database.php';
 require_once dirname(__DIR__) . '/includes/functions.php';
+require_once dirname(__DIR__) . '/includes/mailer.php';
 
 header('Content-Type: application/json');
 
@@ -22,7 +23,8 @@ $purpose   = sanitize($_POST['purpose']    ?? '');
 $duration  = (int)($_POST['duration']      ?? 0);
 $message   = sanitize($_POST['message']    ?? '');
 $lang      = sanitize($_POST['lang']       ?? 'de');
-$country   = sanitize($_POST['country']    ?? '');
+if (!array_key_exists($lang, LANGUAGES)) $lang = 'de';
+$country   = sanitize($_POST['country']    ?? (LANGUAGES[$lang]['name'] ?? ''));
 
 // Validate
 if (strlen($firstName) < 2) jsonResponse(['success' => false, 'message' => 'Prénom invalide'], 422);
@@ -44,61 +46,40 @@ try {
     jsonResponse(['success' => false, 'message' => 'Erreur interne. Veuillez réessayer.'], 500);
 }
 
-// Send notification email to admin
-$smtpHost = getSetting('smtp_host', '');
-$smtpPass = getSetting('smtp_pass', '');
-$smtpUser = getSetting('smtp_user', SITE_EMAIL);
-$smtpPort = (int)getSetting('smtp_port', '587');
-$toEmail  = getSetting('contact_email', SITE_EMAIL);
+// Translate purpose label in the user's language
+$langFile = LANGUAGES[$lang]['file'] ?? 'de';
+$translations = [];
+$langPath = dirname(__DIR__) . '/lang/' . $langFile . '.php';
+if (is_file($langPath)) require $langPath; // sets global $translations
+$purposeLabel = $purpose !== '' ? t('purpose.' . $purpose) : '';
+$amountFmt    = number_format($amount, 0, ',', '.');
 
-if (!empty($smtpHost) && !empty($smtpPass)) {
-    $subject = "[VYNARA] Nouvelle demande de prêt — {$firstName} {$lastName} — €{$amount}";
-    $body    = "Nouvelle demande reçue:\n\n";
-    $body   .= "Nom: $firstName $lastName\n";
-    $body   .= "Email: $email\n";
-    $body   .= "Téléphone: $phone\n";
-    $body   .= "Montant: €$amount\n";
-    $body   .= "Durée: {$duration} mois\n";
-    $body   .= "Objet: $purpose\n";
-    $body   .= "Pays: $country\n\n";
-    $body   .= "Message: $message\n\n";
-    $body   .= "Voir dans l'admin: " . SITE_URL . "/admin007?tab=applications";
+$data = [
+    'firstName' => $firstName, 'lastName' => $lastName, 'email' => $email, 'phone' => $phone,
+    'amountFmt' => $amountFmt, 'duration' => $duration, 'purposeLabel' => $purposeLabel,
+    'country' => $country, 'message' => $message,
+];
 
-    try {
-        $fp = stream_socket_client("tcp://$smtpHost:$smtpPort", $errno, $errstr, 15);
-        if ($fp) {
-            fgets($fp);
-            fputs($fp, "EHLO vynara-finance.cfd\r\n"); fgets($fp);
-            fputs($fp, "AUTH LOGIN\r\n"); fgets($fp);
-            fputs($fp, base64_encode($smtpUser)."\r\n"); fgets($fp);
-            fputs($fp, base64_encode($smtpPass)."\r\n"); fgets($fp);
-            fputs($fp, "MAIL FROM:<$smtpUser>\r\n"); fgets($fp);
-            fputs($fp, "RCPT TO:<$toEmail>\r\n"); fgets($fp);
-            fputs($fp, "DATA\r\n"); fgets($fp);
-            $raw  = "From: VYNARA FINANCE <$smtpUser>\r\n";
-            $raw .= "To: $toEmail\r\n";
-            $raw .= "Subject: =?UTF-8?B?" . base64_encode($subject) . "?=\r\n";
-            $raw .= "Content-Type: text/plain; charset=utf-8\r\n\r\n";
-            $raw .= $body . "\r\n.\r\n";
-            fputs($fp, $raw); fgets($fp);
-            fputs($fp, "QUIT\r\n");
-            fclose($fp);
-        }
-    } catch (Throwable $e) {
-        error_log('Apply SMTP error: ' . $e->getMessage());
-    }
-}
+$ownerEmail = getSetting('contact_email', SITE_EMAIL);
 
-// Success messages
+// 1) Confirmation to the applicant (in their language)
+$userMail = vfApplyUserEmail($lang, $data);
+vfSendMail($email, $firstName . ' ' . $lastName, $userMail['subject'], $userMail['html']);
+
+// 2) Notification to the site owner (French)
+$ownerMail = vfApplyOwnerEmail($data);
+vfSendMail($ownerEmail, SITE_NAME, $ownerMail['subject'], $ownerMail['html'], $email);
+
+// Success messages (shown in the UI)
 $messages = [
-    'da' => 'Din ansøgning er modtaget. Vi kontakter dig snarest.',
-    'de' => 'Ihr Antrag wurde empfangen. Wir melden uns so schnell wie möglich.',
-    'at' => 'Ihr Antrag wurde empfangen. Wir melden uns so schnell wie möglich.',
-    'it' => 'La tua domanda è stata ricevuta. Ti contatteremo al più presto.',
-    'pt' => 'O seu pedido foi recebido. Entraremos em contacto brevemente.',
-    'el' => 'Η αίτησή σας ελήφθη. Θα επικοινωνήσουμε μαζί σας σύντομα.',
-    'sk' => 'Vaša žiadosť bola prijatá. Kontaktujeme vás čo najskôr.',
-    'sl' => 'Vaša vloga je bila prejeta. Kontaktirali vas bomo kmalu.',
-    'ch' => 'Ihr Antrag wurde empfangen. Wir melden uns so schnell wie möglich.',
+    'da' => 'Din ansøgning er modtaget. Du modtager en bekræftelse på e-mail.',
+    'de' => 'Ihr Antrag wurde empfangen. Sie erhalten eine Bestätigung per E-Mail.',
+    'at' => 'Ihr Antrag wurde empfangen. Sie erhalten eine Bestätigung per E-Mail.',
+    'it' => 'La tua domanda è stata ricevuta. Riceverai una conferma via email.',
+    'pt' => 'O seu pedido foi recebido. Receberá uma confirmação por email.',
+    'el' => 'Η αίτησή σας ελήφθη. Θα λάβετε επιβεβαίωση μέσω email.',
+    'sk' => 'Vaša žiadosť bola prijatá. Potvrdenie dostanete e-mailom.',
+    'sl' => 'Vaša vloga je bila prejeta. Potrdilo boste prejeli po e-pošti.',
+    'ch' => 'Ihr Antrag wurde empfangen. Sie erhalten eine Bestätigung per E-Mail.',
 ];
 jsonResponse(['success' => true, 'message' => $messages[$lang] ?? $messages['de']]);

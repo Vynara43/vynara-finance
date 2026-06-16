@@ -14,11 +14,11 @@
         </h1>
         <p class="hero-desc"><?= t('hero.desc') ?></p>
         <div class="hero-actions">
-          <a href="/apply?lang=<?= h($lang) ?>" class="btn btn-primary btn-lg">
+          <a href="/simulate?lang=<?= h($lang) ?>" class="btn btn-primary btn-lg">
             <?= t('hero.cta1') ?> <span class="btn-icon">→</span>
           </a>
-          <a href="/services?lang=<?= h($lang) ?>" class="btn btn-outline btn-lg">
-            <?= t('hero.cta2') ?>
+          <a href="/apply?lang=<?= h($lang) ?>" class="btn btn-outline btn-lg">
+            <?= t('nav.apply') ?>
           </a>
         </div>
         <div class="hero-trust">

@@ -136,4 +136,22 @@ $translations = [
     'cta.learn'           => 'Mehr erfahren',
     'cta.section.title'   => 'Bereit, Ihr Projekt zu verwirklichen?',
     'cta.section.desc'    => 'Kontaktieren Sie uns heute für eine kostenlose und unverbindliche Beratung.',
+
+    // Loan Simulator
+    'sim.title' => 'Kreditrechner',
+    'sim.subtitle' => 'Berechnen Sie Ihre monatliche Rate in wenigen Sekunden',
+    'sim.amount' => 'Kreditbetrag',
+    'sim.duration' => 'Laufzeit',
+    'sim.type' => 'Kreditart',
+    'sim.type.personal' => 'Privatkredit',
+    'sim.type.business' => 'Geschäftskredit',
+    'sim.type.mortgage' => 'Immobilienkredit',
+    'sim.type.refi' => 'Umschuldung',
+    'sim.rate' => 'Jahreszins',
+    'sim.monthly' => 'Geschätzte monatliche Rate',
+    'sim.total' => 'Gesamtkosten',
+    'sim.interest' => 'Gesamtzinsen',
+    'sim.months' => 'Monate',
+    'sim.cta' => 'Diesen Kredit beantragen',
+    'sim.disclaimer' => 'Unverbindliche Schätzung. Der endgültige Zinssatz hängt von Ihrem Antrag ab.',
 ];

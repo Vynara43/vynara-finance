@@ -1,5 +1,6 @@
 <?php if (!defined('SITE_NAME')) die();
-$pageTitle = t('nav.apply'); ?>
+$pageTitle = t('nav.apply');
+$prefillAmount = (isset($_GET['amount']) && (int)$_GET['amount'] >= 1000) ? (int)$_GET['amount'] : ''; ?>
 
 <section class="page-hero">
   <div class="container">
@@ -61,7 +62,8 @@ $pageTitle = t('nav.apply'); ?>
           <div class="form-row">
             <div class="form-group">
               <label class="form-label"><?= t('apply.amount') ?> *</label>
-              <input type="number" name="amount" id="amount" class="form-input" min="1000" max="2000000" required placeholder="50000">
+              <input type="number" name="amount" id="amount" class="form-input" min="1000" max="2000000" required placeholder="50000" value="<?= h((string)$prefillAmount) ?>">
+
             </div>
             <div class="form-group">
               <label class="form-label"><?= t('apply.duration') ?> *</label>

@@ -102,4 +102,22 @@ $translations = [
     'cta.learn'           => 'Izvedite več',
     'cta.section.title'   => 'Pripravljeni uresničiti vaš projekt?',
     'cta.section.desc'    => 'Kontaktirajte nas danes za brezplačno in nezavezujočo posvetovanje.',
+
+    // Loan Simulator
+    'sim.title' => 'Kalkulator posojila',
+    'sim.subtitle' => 'Izračunajte mesečni obrok v nekaj sekundah',
+    'sim.amount' => 'Znesek posojila',
+    'sim.duration' => 'Doba odplačevanja',
+    'sim.type' => 'Vrsta posojila',
+    'sim.type.personal' => 'Osebno posojilo',
+    'sim.type.business' => 'Poslovno posojilo',
+    'sim.type.mortgage' => 'Stanovanjsko posojilo',
+    'sim.type.refi' => 'Združitev kreditov',
+    'sim.rate' => 'Letna obrestna mera',
+    'sim.monthly' => 'Ocenjeni mesečni obrok',
+    'sim.total' => 'Skupni stroški',
+    'sim.interest' => 'Skupne obresti',
+    'sim.months' => 'mesecev',
+    'sim.cta' => 'Zaprosi za to posojilo',
+    'sim.disclaimer' => 'Okvirna in neobvezujoča ocena. Končna obrestna mera je odvisna od vaše vloge.',
 ];

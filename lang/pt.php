@@ -136,4 +136,22 @@ $translations = [
     'cta.learn'           => 'Saiba mais',
     'cta.section.title'   => 'Pronto para concretizar seu projeto?',
     'cta.section.desc'    => 'Contacte-nos hoje para uma consulta gratuita e sem compromisso.',
+
+    // Loan Simulator
+    'sim.title' => 'Simulador de empréstimo',
+    'sim.subtitle' => 'Calcule a sua prestação mensal em segundos',
+    'sim.amount' => 'Montante do empréstimo',
+    'sim.duration' => 'Prazo',
+    'sim.type' => 'Tipo de empréstimo',
+    'sim.type.personal' => 'Empréstimo pessoal',
+    'sim.type.business' => 'Empréstimo empresarial',
+    'sim.type.mortgage' => 'Crédito habitação',
+    'sim.type.refi' => 'Consolidação de créditos',
+    'sim.rate' => 'Taxa anual',
+    'sim.monthly' => 'Prestação mensal estimada',
+    'sim.total' => 'Custo total',
+    'sim.interest' => 'Juros totais',
+    'sim.months' => 'meses',
+    'sim.cta' => 'Solicitar este empréstimo',
+    'sim.disclaimer' => 'Estimativa indicativa e sem compromisso. A taxa final depende do seu pedido.',
 ];

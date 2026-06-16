@@ -102,4 +102,22 @@ $translations = [
     'cta.learn'           => 'Zistiť viac',
     'cta.section.title'   => 'Pripravení realizovať váš projekt?',
     'cta.section.desc'    => 'Kontaktujte nás dnes pre bezplatnú a nezáväznú konzultáciu.',
+
+    // Loan Simulator
+    'sim.title' => 'Kalkulačka pôžičky',
+    'sim.subtitle' => 'Vypočítajte si mesačnú splátku za pár sekúnd',
+    'sim.amount' => 'Výška pôžičky',
+    'sim.duration' => 'Doba splácania',
+    'sim.type' => 'Typ pôžičky',
+    'sim.type.personal' => 'Osobná pôžička',
+    'sim.type.business' => 'Podnikateľská pôžička',
+    'sim.type.mortgage' => 'Hypotéka',
+    'sim.type.refi' => 'Konsolidácia úverov',
+    'sim.rate' => 'Ročná úroková sadzba',
+    'sim.monthly' => 'Odhadovaná mesačná splátka',
+    'sim.total' => 'Celkové náklady',
+    'sim.interest' => 'Celkové úroky',
+    'sim.months' => 'mesiacov',
+    'sim.cta' => 'Požiadať o túto pôžičku',
+    'sim.disclaimer' => 'Orientačný a nezáväzný odhad. Konečná sadzba závisí od vašej žiadosti.',
 ];

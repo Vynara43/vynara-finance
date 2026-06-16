@@ -46,6 +46,7 @@ $pageMap = [
     'about'     => 'about',
     'contact'   => 'contact',
     'apply'     => 'apply',
+    'simulate'  => 'simulate',
     'privacy'   => 'privacy',
     'terms'     => 'terms',
 ];

@@ -272,3 +272,54 @@ if (amountInput) {
     amountInput.value = v;
   });
 }
+
+/* ── Loan Simulator ─────────────────────────────────────────────────────────── */
+(function initSimulator() {
+  const form = document.getElementById('sim-form');
+  if (!form) return;
+
+  const typeEl     = document.getElementById('sim-type');
+  const amountEl   = document.getElementById('sim-amount');
+  const durationEl = document.getElementById('sim-duration');
+  const amountLbl  = document.getElementById('sim-amount-label');
+  const durLbl     = document.getElementById('sim-duration-label');
+  const monthsTxt  = (durLbl.textContent.match(/[^0-9\s]+.*$/) || ['mois'])[0].trim() ||
+                     durLbl.textContent.replace(/[0-9]/g, '').trim();
+  const monthsWord = durLbl.textContent.replace(/[0-9]/g, '').trim() || 'mois';
+
+  const out = {
+    monthly:  document.getElementById('sim-monthly'),
+    rate:     document.getElementById('sim-rate'),
+    interest: document.getElementById('sim-interest'),
+    total:    document.getElementById('sim-total'),
+  };
+  const cta = document.getElementById('sim-cta');
+  const fmt = new Intl.NumberFormat('de-DE', { maximumFractionDigits: 0 });
+
+  function compute() {
+    const rate     = parseFloat(typeEl.selectedOptions[0].dataset.rate) || 3.9;
+    const amount   = parseFloat(amountEl.value) || 0;
+    const months   = parseInt(durationEl.value) || 1;
+    const r        = rate / 100 / 12;
+    const monthly  = r > 0 ? (amount * r) / (1 - Math.pow(1 + r, -months)) : amount / months;
+    const total    = monthly * months;
+    const interest = total - amount;
+
+    amountLbl.textContent = '€' + fmt.format(amount);
+    durLbl.textContent    = months + ' ' + monthsWord;
+    out.monthly.textContent  = '€' + fmt.format(Math.round(monthly));
+    out.rate.textContent     = rate.toFixed(1).replace('.', ',') + '%';
+    out.interest.textContent = '€' + fmt.format(Math.round(interest));
+    out.total.textContent    = '€' + fmt.format(Math.round(total));
+
+    const url = new URL(cta.href, window.location.origin);
+    url.searchParams.set('amount', Math.round(amount));
+    cta.href = url.pathname + '?' + url.searchParams.toString();
+  }
+
+  [typeEl, amountEl, durationEl].forEach(el => {
+    el.addEventListener('input', compute);
+    el.addEventListener('change', compute);
+  });
+  compute();
+})();
