@@ -76,6 +76,21 @@ if ($action === 'update_status') {
     exit;
 }
 
+if ($action === 'delete') {
+    $id   = (int)($_POST['id']   ?? 0);
+    $type = sanitize($_POST['type'] ?? '');
+    if ($id > 0 && in_array($type, ['application', 'message'])) {
+        $pdo = getDB();
+        if ($type === 'application') {
+            $pdo->prepare('DELETE FROM loan_applications WHERE id=?')->execute([$id]);
+        } elseif ($type === 'message') {
+            $pdo->prepare('DELETE FROM contact_messages WHERE id=?')->execute([$id]);
+        }
+    }
+    header('Location: /admin007?' . ($type === 'application' ? 'tab=applications' : 'tab=messages'));
+    exit;
+}
+
 // ─ Load data ─────────────────────────────────────────────────────────────────
 $tab = $_GET['tab'] ?? 'dashboard';
 
@@ -292,7 +307,7 @@ function adminLoginPage(string $error = ''): void {
         </thead>
         <tbody>
           <?php if (!empty($applications)): foreach ($applications as $app): ?>
-          <tr>
+          <tr class="row-clickable" data-type="application" data-record="<?= htmlspecialchars(json_encode($app, JSON_UNESCAPED_UNICODE)) ?>">
             <td><?= (int)$app['id'] ?></td>
             <td><?= htmlspecialchars($app['first_name'] . ' ' . $app['last_name']) ?></td>
             <td><?= htmlspecialchars($app['email']) ?></td>
@@ -303,18 +318,29 @@ function adminLoginPage(string $error = ''): void {
             <td><?= htmlspecialchars($app['country'] ?? '—') ?></td>
             <td><span class="badge-status badge-<?= $app['status'] ?>"><?= ucfirst($app['status']) ?></span></td>
             <td style="color:var(--text-muted);font-size:0.78rem"><?= formatDate($app['created_at']) ?></td>
-            <td>
-              <form method="POST" action="/admin007?tab=applications" style="display:flex;gap:6px;align-items:center">
-                <input type="hidden" name="action" value="update_status">
-                <input type="hidden" name="type" value="application">
-                <input type="hidden" name="id" value="<?= (int)$app['id'] ?>">
-                <select name="status" class="form-select" style="padding:5px 8px;font-size:0.78rem;background:rgba(255,255,255,0.06);border-radius:6px;min-width:110px">
-                  <?php foreach (['pending','reviewing','approved','rejected'] as $st): ?>
-                  <option value="<?= $st ?>" <?= $app['status'] === $st ? 'selected' : '' ?>><?= ucfirst($st) ?></option>
-                  <?php endforeach; ?>
-                </select>
-                <button type="submit" class="admin-btn admin-btn-primary" style="padding:5px 10px;font-size:0.78rem">✓</button>
-              </form>
+            <td class="no-row-click">
+              <div style="display:flex;flex-direction:column;gap:5px">
+                <form method="POST" action="/admin007?tab=applications" style="display:flex;gap:5px;align-items:center">
+                  <input type="hidden" name="action" value="update_status">
+                  <input type="hidden" name="type" value="application">
+                  <input type="hidden" name="id" value="<?= (int)$app['id'] ?>">
+                  <select name="status" class="form-select" style="padding:5px 8px;font-size:0.78rem;background:rgba(255,255,255,0.06);border-radius:6px;min-width:110px">
+                    <?php foreach (['pending','reviewing','approved','rejected'] as $st): ?>
+                    <option value="<?= $st ?>" <?= $app['status'] === $st ? 'selected' : '' ?>><?= ucfirst($st) ?></option>
+                    <?php endforeach; ?>
+                  </select>
+                  <button type="submit" class="admin-btn admin-btn-primary" style="padding:5px 10px;font-size:0.78rem">✓</button>
+                </form>
+                <div style="display:flex;gap:5px">
+                  <button type="button" onclick="openDetail(this.closest('tr'))" style="padding:5px 10px;font-size:0.78rem;flex:1;background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.3);color:var(--gold-500);border-radius:6px;cursor:pointer">👁 Voir</button>
+                  <form method="POST" action="/admin007?tab=applications" onsubmit="return confirm('Supprimer cette demande ? Action irréversible.')" style="flex:1">
+                    <input type="hidden" name="action" value="delete">
+                    <input type="hidden" name="type" value="application">
+                    <input type="hidden" name="id" value="<?= (int)$app['id'] ?>">
+                    <button type="submit" class="admin-btn admin-btn-danger" style="padding:5px 10px;font-size:0.78rem;width:100%">🗑 Suppr.</button>
+                  </form>
+                </div>
+              </div>
             </td>
           </tr>
           <?php endforeach; else: ?>
@@ -335,24 +361,33 @@ function adminLoginPage(string $error = ''): void {
         </thead>
         <tbody>
           <?php if (!empty($messages)): foreach ($messages as $msg): ?>
-          <tr>
+          <tr class="row-clickable" data-type="message" data-record="<?= htmlspecialchars(json_encode($msg, JSON_UNESCAPED_UNICODE)) ?>">
             <td><?= (int)$msg['id'] ?></td>
             <td><?= htmlspecialchars($msg['name']) ?></td>
             <td><?= htmlspecialchars($msg['email']) ?></td>
             <td><?= htmlspecialchars($msg['subject'] ?? '—') ?></td>
-            <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="<?= htmlspecialchars($msg['message']) ?>"><?= htmlspecialchars(substr($msg['message'], 0, 60)) ?>...</td>
+            <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text-muted)"><?= htmlspecialchars(substr($msg['message'], 0, 60)) ?>…</td>
             <td><?= strtoupper(htmlspecialchars($msg['lang'] ?? '—')) ?></td>
             <td><span class="badge-status <?= $msg['is_read'] ? '' : 'badge-unread' ?>"><?= $msg['is_read'] ? 'Lu' : 'Non lu' ?></span></td>
             <td style="color:var(--text-muted);font-size:0.78rem"><?= formatDate($msg['created_at']) ?></td>
-            <td>
-              <?php if (!$msg['is_read']): ?>
-              <form method="POST" action="/admin007?tab=messages">
-                <input type="hidden" name="action" value="update_status">
-                <input type="hidden" name="type" value="message">
-                <input type="hidden" name="id" value="<?= (int)$msg['id'] ?>">
-                <button type="submit" class="admin-btn admin-btn-primary" style="padding:5px 12px;font-size:0.78rem">Marquer lu</button>
-              </form>
-              <?php endif; ?>
+            <td class="no-row-click">
+              <div style="display:flex;flex-direction:column;gap:5px">
+                <?php if (!$msg['is_read']): ?>
+                <form method="POST" action="/admin007?tab=messages">
+                  <input type="hidden" name="action" value="update_status">
+                  <input type="hidden" name="type" value="message">
+                  <input type="hidden" name="id" value="<?= (int)$msg['id'] ?>">
+                  <button type="submit" class="admin-btn admin-btn-primary" style="padding:5px 10px;font-size:0.78rem;width:100%">✓ Lu</button>
+                </form>
+                <?php endif; ?>
+                <button type="button" onclick="openDetail(this.closest('tr'))" style="padding:5px 10px;font-size:0.78rem;background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.3);color:var(--gold-500);border-radius:6px;cursor:pointer">👁 Voir</button>
+                <form method="POST" action="/admin007?tab=messages" onsubmit="return confirm('Supprimer ce message ? Action irréversible.')">
+                  <input type="hidden" name="action" value="delete">
+                  <input type="hidden" name="type" value="message">
+                  <input type="hidden" name="id" value="<?= (int)$msg['id'] ?>">
+                  <button type="submit" class="admin-btn admin-btn-danger" style="padding:5px 10px;font-size:0.78rem;width:100%">🗑 Suppr.</button>
+                </form>
+              </div>
             </td>
           </tr>
           <?php endforeach; else: ?>
@@ -437,5 +472,101 @@ function adminLoginPage(string $error = ''): void {
 </div>
 
 <script src="/assets/js/main.js" defer></script>
+
+<!-- Detail Modal -->
+<div id="detailModal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.75);backdrop-filter:blur(4px);overflow-y:auto;padding:20px" onclick="if(event.target===this)closeModal()">
+  <div style="max-width:680px;margin:40px auto;background:#0d1f38;border:1px solid rgba(201,168,76,0.25);border-radius:16px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.5)">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid rgba(255,255,255,0.08);background:rgba(201,168,76,0.06)">
+      <div id="modalTitle" style="font-size:1.1rem;font-weight:700;color:var(--gold-500)"></div>
+      <button onclick="closeModal()" style="background:rgba(255,255,255,0.08);border:none;color:#fff;width:32px;height:32px;border-radius:50%;font-size:1.2rem;cursor:pointer">&times;</button>
+    </div>
+    <div id="modalBody" style="padding:24px"></div>
+    <div id="modalFooter" style="padding:16px 24px;border-top:1px solid rgba(255,255,255,0.08);display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap"></div>
+  </div>
+</div>
+
+<style>
+.row-clickable{cursor:pointer;transition:background .15s}
+.row-clickable:hover{background:rgba(201,168,76,.06)!important}
+.d-row{display:flex;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.d-block{flex:1;min-width:180px}
+.d-label{font-size:.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
+.d-value{font-size:.9rem;color:#e0e6f0;word-break:break-word}
+.d-msg{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:14px;line-height:1.65;color:#d0d8e8;font-size:.9rem;white-space:pre-wrap;word-break:break-word;margin-top:6px}
+</style>
+
+<script>
+function openDetail(row){
+  const type=row.dataset.type,r=JSON.parse(row.dataset.record);
+  const modal=document.getElementById('detailModal'),
+        title=document.getElementById('modalTitle'),
+        body=document.getElementById('modalBody'),
+        footer=document.getElementById('modalFooter');
+  if(type==='application'){
+    title.textContent='Demande #'+r.id+' — '+r.first_name+' '+r.last_name;
+    body.innerHTML=`
+      <div class="d-row">
+        <div class="d-block"><div class="d-label">Prénom</div><div class="d-value">${e(r.first_name)}</div></div>
+        <div class="d-block"><div class="d-label">Nom</div><div class="d-value">${e(r.last_name)}</div></div>
+      </div>
+      <div class="d-row">
+        <div class="d-block"><div class="d-label">Email</div><div class="d-value">${e(r.email)}</div></div>
+        <div class="d-block"><div class="d-label">Téléphone</div><div class="d-value">${e(r.phone||'—')}</div></div>
+      </div>
+      <div class="d-row">
+        <div class="d-block"><div class="d-label">Montant</div><div class="d-value" style="color:var(--gold-500);font-weight:700;font-size:1.1rem">€${Number(r.amount).toLocaleString('fr-FR')}</div></div>
+        <div class="d-block"><div class="d-label">Durée</div><div class="d-value">${e(r.duration)} mois</div></div>
+        <div class="d-block"><div class="d-label">Objet</div><div class="d-value">${e(r.purpose||'—')}</div></div>
+      </div>
+      <div class="d-row">
+        <div class="d-block"><div class="d-label">Pays</div><div class="d-value">${e(r.country||'—')}</div></div>
+        <div class="d-block"><div class="d-label">Langue</div><div class="d-value">${e((r.lang||'—').toUpperCase())}</div></div>
+        <div class="d-block"><div class="d-label">Statut</div><div class="d-value"><span class="badge-status badge-${e(r.status)}">${e(r.status)}</span></div></div>
+      </div>
+      <div class="d-row"><div class="d-block" style="flex:100%"><div class="d-label">Date</div><div class="d-value">${e(r.created_at)}</div></div></div>
+      ${r.message?`<div><div class="d-label" style="margin-bottom:6px">Message du client</div><div class="d-msg">${e(r.message)}</div></div>`:''}
+    `;
+    footer.innerHTML=`
+      <form method="POST" action="/admin007?tab=applications" onsubmit="return confirm('Supprimer cette demande ? Action irréversible.')">
+        <input type="hidden" name="action" value="delete"><input type="hidden" name="type" value="application"><input type="hidden" name="id" value="${r.id}">
+        <button type="submit" class="admin-btn admin-btn-danger" style="padding:9px 18px">🗑 Supprimer</button>
+      </form>
+      <button onclick="closeModal()" class="admin-btn" style="padding:9px 18px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:#fff">Fermer</button>`;
+  } else {
+    title.textContent='Message #'+r.id+' — '+r.name;
+    body.innerHTML=`
+      <div class="d-row">
+        <div class="d-block"><div class="d-label">Nom</div><div class="d-value">${e(r.name)}</div></div>
+        <div class="d-block"><div class="d-label">Email</div><div class="d-value">${e(r.email)}</div></div>
+      </div>
+      <div class="d-row">
+        <div class="d-block"><div class="d-label">Sujet</div><div class="d-value">${e(r.subject||'—')}</div></div>
+        <div class="d-block"><div class="d-label">Langue</div><div class="d-value">${e((r.lang||'—').toUpperCase())}</div></div>
+        <div class="d-block"><div class="d-label">Statut</div><div class="d-value"><span class="badge-status ${r.is_read?'':'badge-unread'}">${r.is_read?'Lu':'Non lu'}</span></div></div>
+      </div>
+      <div class="d-row"><div class="d-block" style="flex:100%"><div class="d-label">Date</div><div class="d-value">${e(r.created_at)}</div></div></div>
+      <div><div class="d-label" style="margin-bottom:6px">Message complet</div><div class="d-msg">${e(r.message)}</div></div>
+    `;
+    const readBtn=!r.is_read?`<form method="POST" action="/admin007?tab=messages"><input type="hidden" name="action" value="update_status"><input type="hidden" name="type" value="message"><input type="hidden" name="id" value="${r.id}"><button type="submit" class="admin-btn admin-btn-primary" style="padding:9px 18px">✓ Marquer lu</button></form>`:'';
+    footer.innerHTML=`${readBtn}
+      <form method="POST" action="/admin007?tab=messages" onsubmit="return confirm('Supprimer ce message ? Action irréversible.')">
+        <input type="hidden" name="action" value="delete"><input type="hidden" name="type" value="message"><input type="hidden" name="id" value="${r.id}">
+        <button type="submit" class="admin-btn admin-btn-danger" style="padding:9px 18px">🗑 Supprimer</button>
+      </form>
+      <button onclick="closeModal()" class="admin-btn" style="padding:9px 18px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:#fff">Fermer</button>`;
+  }
+  modal.style.display='block';
+  document.body.style.overflow='hidden';
+}
+function closeModal(){
+  document.getElementById('detailModal').style.display='none';
+  document.body.style.overflow='';
+}
+function e(s){return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+document.addEventListener('keydown',ev=>{if(ev.key==='Escape')closeModal();});
+document.querySelectorAll('.row-clickable').forEach(row=>{
+  row.addEventListener('click',ev=>{if(!ev.target.closest('.no-row-click'))openDetail(row);});
+});
+</script>
 </body>
 </html>

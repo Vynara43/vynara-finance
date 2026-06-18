@@ -183,6 +183,7 @@ if (contactForm) {
       const data = await resp.json();
 
       if (data.success) {
+        if (typeof gtag === 'function') gtag('event', 'conversion', {'send_to': 'AW-18244537005/nyaBCObzq8AcEK2V1vtD'});
         contactForm.reset();
         contactForm.style.display = 'none';
         alert.className = 'form-alert show success';
@@ -226,6 +227,7 @@ if (applyForm) {
       const data = await resp.json();
 
       if (data.success) {
+        if (typeof gtag === 'function') gtag('event', 'conversion', {'send_to': 'AW-18244537005/nyaBCObzq8AcEK2V1vtD'});
         applyForm.reset();
         applyForm.style.display = 'none';
         alert.className = 'form-alert show success';

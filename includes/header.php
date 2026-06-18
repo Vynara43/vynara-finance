@@ -43,6 +43,15 @@ $currentPage = currentPage();
 
   <!-- Styles -->
   <link rel="stylesheet" href="/assets/css/style.css?v=20260611b">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18244537005"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'AW-18244537005');
+  </script>
 </head>
 <body>
 
